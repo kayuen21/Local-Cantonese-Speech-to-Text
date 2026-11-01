@@ -37,7 +37,7 @@ The installer will automatically set up the self-contained environment in this f
 ---
 
 ### 2. Launch the Application
-- Double-click **`CantoneseSTT.exe`** (or `Start Cantonese STT.vbs`).
+- Double-click **`CantoneseSTT.exe`**.
 - Your browser will open automatically at `http://127.0.0.1:5000`.
 - Drop in your audio file, select your preferences, and click **開始轉寫** (Start Transcription).
 - Download your finished transcript as **TXT**, **SRT**, or **VTT**.
