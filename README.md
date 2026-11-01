@@ -1,5 +1,7 @@
 # Local Cantonese Speech-to-Text
 
+<img width="3168" height="1692" alt="image" src="https://github.com/kayuen21/Local-Cantonese-Speech-to-Text/blob/main/app/templates/1.png" />
+
 A completely offline, local GPU-accelerated Cantonese speech-to-text pipeline featuring:
 - **Faster-Whisper (NVIDIA CUDA)**: Fast and accurate Cantonese transcription (`yue` / `zh`).
 - **Speaker Diarization (PyAnnote Audio)**: Automatically labels who spoke when (`說話人1`, `說話人2`).
