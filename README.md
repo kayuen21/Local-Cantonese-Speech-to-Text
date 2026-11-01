@@ -35,6 +35,7 @@ The installer will automatically set up the self-contained environment in this f
 *(You only need to run `Setup.exe` once)*
 
 ---
+<img width="3168" height="1692" alt="image" src="https://github.com/user-attachments/assets/7b2721c1-e024-4d41-9287-1e069b1271bd" />
 
 ### 2. Launch the Application
 - Double-click **`CantoneseSTT.exe`**.
