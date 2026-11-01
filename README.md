@@ -24,7 +24,7 @@ flowchart LR
 ## Getting Started
 
 ### 1. First-Time Setup (One-Click)
-Double-click **`Setup.exe`** (or run `Install Environment.bat`).
+Double-click **`Setup.exe`**.
 
 The installer will automatically set up the self-contained environment in this folder:
 - Portable Python 3.11 runtime (~11 MB)
@@ -43,7 +43,7 @@ The installer will automatically set up the self-contained environment in this f
 - Download your finished transcript as **TXT**, **SRT**, or **VTT**.
 
 ### 3. Stop the Application
-- Double-click **`Stop Cantonese STT.exe`** (or `Stop Cantonese STT.vbs`) to cleanly close both the web server and the embedded LLM.
+- Double-click **`Stop Cantonese STT.exe`** to cleanly close both the web server and the embedded LLM.
 
 ---
 
