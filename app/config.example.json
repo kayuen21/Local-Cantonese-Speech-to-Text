@@ -1,0 +1,7 @@
+{
+  "hf_token": "",
+  "llm_url": "http://127.0.0.1:8080",
+  "chat_model": "",
+  "chat_num_ctx": 4096,
+  "chat_num_predict": 2048
+}

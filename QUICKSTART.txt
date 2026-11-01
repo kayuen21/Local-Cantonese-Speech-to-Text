@@ -1,0 +1,67 @@
+CANTONESE SPEECH TO TEXT (FULL VERSION) - HOW TO OPEN IT
+=========================================================
+
+Zero setup, no typing. Everything is in this folder.
+
+
+FIRST TIME SETUP (IF DOWNLOADING FROM GITHUB)
+---------------------------------------------
+  If you downloaded this repository from GitHub without the environment:
+  Double-click:   Setup.exe  (or Install Environment.bat)
+
+  It will automatically download and set up the portable Python, PyTorch CUDA,
+  and GPU LLM server into this folder. You only need to do this ONCE.
+
+
+OPEN THE APP
+------------
+  Double-click:   CantoneseSTT.exe  (or Start Cantonese STT.vbs)
+
+  Your browser opens automatically (http://127.0.0.1:5000).
+  Drop in an audio file, choose your preferences, and press "開始轉寫".
+  The finished transcript can be downloaded as TXT, SRT, or VTT.
+
+  Want a desktop icon? Double-click "Create Desktop Shortcut.vbs" once.
+
+
+CLOSE THE APP
+-------------
+  Double-click:   Stop Cantonese STT.exe  (or Stop Cantonese STT.vbs)
+
+
+IF THE BROWSER DOES NOT OPEN
+----------------------------
+  Double-click:   Start Cantonese STT (debug).bat
+
+  That window displays live logs and diagnostic details.
+  Keep it open while using the app; closing it stops the server.
+
+
+SPEAKER DIARIZATION (WHO SPOKE WHEN)
+------------------------------------
+  The full PyAnnote 4.x pipeline is built-in.
+  Because PyAnnote is a gated research model on Hugging Face:
+    1. Visit: https://huggingface.co/pyannote/speaker-diarization-3.1
+    2. Accept user terms and generate an Access Token.
+    3. In the app UI under "說話人", click "設定 Token" and paste your token.
+       (Or put it in config.json as {"hf_token": "hf_..."}).
+  Once saved, the app remembers it permanently.
+
+
+MEETING-NOTES ASSISTANT & LOCAL PROOFREADING (OPTIONAL)
+------------------------------------------------------
+  Transcription and diarization work completely offline.
+  The meeting-notes chatbox and proofreading use the built-in embedded LLM
+  (powered by llama-server with GPU acceleration, zero Ollama installation needed!).
+  Models (speech and LLMs) are downloaded automatically on first selection into models\,
+  or you can drop any GGUF / faster-whisper model directly into models\. Zero setup needed!
+
+  Everything stays on this PC: audio, transcripts and questions are never
+  sent anywhere.
+
+
+KEEP THIS FOLDER INTACT
+-----------------------
+  You can move or copy the whole folder anywhere (USB drive, secondary drive).
+  All components (Python runtime, PyTorch CUDA cu128, PyAnnote, Whisper model,
+  embedded LLM server and FFmpeg DLLs) are self-contained. Do not extract single files.

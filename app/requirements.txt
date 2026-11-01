@@ -1,0 +1,19 @@
+# --- speech recognition (GPU) ---------------------------------------------
+faster-whisper>=1.2.1
+nvidia-cublas-cu12
+nvidia-cudnn-cu12
+nvidia-cuda-runtime-cu12
+
+# --- web server -----------------------------------------------------------
+flask>=3.0
+
+# --- local LLM client (OpenAI-compatible HTTP API / llama-server) -----------
+httpx
+
+# --- speaker diarization (pyannote 4.x) -----------------------------------
+# IMPORTANT: install torch/torchaudio from the PyTorch CUDA index BEFORE this
+# file, otherwise pip installs the CPU-only build:
+#   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu128
+# pyannote 4.x decodes audio through torchcodec, which on Windows needs the
+# FFmpeg *shared* build on PATH — see README.
+pyannote.audio>=4.0

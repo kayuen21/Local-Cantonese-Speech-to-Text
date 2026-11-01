@@ -1,0 +1,29 @@
+# Multi-GB portable binaries (downloaded by Setup.exe / Install Environment.bat)
+python/
+llm/
+app/ffmpeg-shared/
+
+# Private configuration with user tokens
+config.json
+app/config.json
+*.env
+
+# Models are automatically downloaded by the application
+models/*
+!models/.gitkeep
+*.gguf
+*.bin
+
+# User uploads and transcripts
+app/uploads/*
+!app/uploads/.gitkeep
+app/results/*
+!app/results/.gitkeep
+
+# Temporary files and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.download
+*.tmp
+*.log

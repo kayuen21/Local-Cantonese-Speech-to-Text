@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>粵轉文字 — 本地粵語語音轉文字</title>
+<link rel="stylesheet" href="/static/style.css?v=11">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎙️</text></svg>">
+</head>
+<body>
+
+<!-- ===================== Nav ===================== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+        <path d="M4 9v6M8 6v12M12 3v18M16 6v12M20 9v6"/>
+      </svg>
+      <span>粵轉文字</span>
+    </a>
+    <div class="nav-links">
+      <a href="#studio">轉寫</a>
+      <a href="#features">功能</a>
+      <a href="#how">如何運作</a>
+    </div>
+    <div class="nav-badge" id="gpuBadge">偵測中…</div>
+  </div>
+</nav>
+
+<!-- ===================== Hero ===================== -->
+<header class="hero">
+  <div class="hero-glow"></div>
+  <p class="hero-sub fade-up">拖入一段粵語錄音，轉文字即刻生成。<br class="br-desktop">支援粵英混講，由你的GPU實時驅動，音訊不離開這台電腦。</p>
+  <div class="hero-cta fade-up">
+    <a class="btn btn-primary" href="#studio">開始轉寫</a>
+    <a class="btn btn-secondary" href="#how">了解流程</a>
+  </div>
+  <ul class="hero-chips fade-up">
+    <li><span class="chip">🗣️ 粵語/英文混合</span></li>
+    <li><span class="chip">🔒 檔案僅留在本機</span></li>
+    <li><span class="chip">⚡ 快於即時轉寫</span></li>
+  </ul>
+</header>
+
+<!-- ===================== Features ===================== -->
+<section class="features" id="features">
+  <div class="feature-card fade-up">
+    <div class="feature-icon">🖥️</div>
+    <h3>完全本地運算</h3>
+    <p>Whisper 模型在你自己的 GPU 上運行，無伺服器、無上傳、無隱私顧慮。</p>
+  </div>
+  <div class="feature-card fade-up" style="animation-delay:.1s">
+    <div class="feature-icon">🔤</div>
+    <h3>粵英雙語混寫</h3>
+    <p>「我個 project 聽日 deadline」這類港式混講，中英文字自然混排輸出。</p>
+  </div>
+  <div class="feature-card fade-up" style="animation-delay:.2s">
+    <div class="feature-icon">🎬</div>
+    <h3>字幕一鍵匯出</h3>
+    <p>下載 .txt 全文或 .srt / .vtt 字幕，直接匯入剪輯軟體或播放器。</p>
+  </div>
+</section>
+
+<!-- ===================== Studio ===================== -->
+<section class="studio" id="studio">
+  <div class="studio-head fade-up">
+    <h2>轉寫工作台</h2>
+    <p>選擇音訊，其餘交給本地 GPU。</p>
+  </div>
+
+  <div class="studio-card fade-up">
+
+    <!-- dropzone -->
+    <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="上傳音訊">
+      <svg class="dz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 16V4m0 0l-4 4m4-4l4 4"/>
+        <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+        <path d="M12 3v10" opacity="0"/>
+      </svg>
+      <p class="dz-title">拖入音檔，或<span class="dz-browse">點選上傳</span></p>
+      <p class="dz-hint">mp3 · wav · m4a · flac · aac · ogg · 視訊檔案亦可 · 最大 2GB</p>
+      <input type="file" id="fileInput" accept=".mp3,.wav,.m4a,.flac,.aac,.ogg,.opus,.wma,.mp4,.mkv,.webm,.mov,.amr,.3gp,.aiff,.caf,audio/*,video/*" hidden>
+    </div>
+
+    <!-- file chip -->
+    <div class="file-chip hidden" id="fileChip">
+      <svg class="chip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 3h6l4 4v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/>
+        <path d="M14 3v4h4"/>
+      </svg>
+      <div class="chip-meta">
+        <p class="chip-name" id="fileName">—</p>
+        <p class="chip-size" id="fileSize">—</p>
+      </div>
+      <button class="chip-remove" id="fileRemove" aria-label="移除檔案">✕</button>
+    </div>
+
+    <!-- controls -->
+    <div class="controls" id="controls">
+      <div class="ctl-group">
+        <span class="ctl-label">模型</span>
+        <div class="segmented" id="modelSeg">
+          <button class="seg-btn active" data-value="medium">均衡 · medium</button>
+          <button class="seg-btn" data-value="large-v3">精準 · large-v3</button>
+        </div>
+        <p class="ctl-note" id="modelNote">large-v3 首次使用需下載約 3GB 模型</p>
+      </div>
+      <div class="ctl-group">
+        <span class="ctl-label">語言</span>
+        <div class="segmented" id="langSeg">
+          <button class="seg-btn active" data-value="auto">自動辨識</button>
+          <button class="seg-btn" data-value="zh">僅中文 / 粵語</button>
+        </div>
+        <p class="ctl-note">自動辨識對粵語已做過最佳化，建議保持</p>
+      </div>
+      <div class="ctl-group">
+        <span class="ctl-label">校對</span>
+        <div class="segmented" id="proofSeg">
+          <button class="seg-btn active" data-value="1">LLM 校對</button>
+          <button class="seg-btn" data-value="0">關閉</button>
+        </div>
+        <p class="ctl-note">本地 LLM 二次校正（依所選模型）</p>
+      </div>
+      <div class="ctl-group">
+        <span class="ctl-label">LLM 模型</span>
+        <div class="segmented" id="llmTierSeg">
+          <button class="seg-btn active" data-tier="weak">輕量 1.5B</button>
+          <button class="seg-btn" data-tier="medium">平衡 3B</button>
+          <button class="seg-btn" data-tier="strong">強力 8B</button>
+        </div>
+        <p class="ctl-note" id="llmModelNote">模型檢測中…</p>
+        <div class="setup hidden" id="modelDownloadBox" style="margin-top:10px;text-align:center;">
+          <p class="setup-text" id="modelDownloadText">尚未下載此模型</p>
+          <div class="setup-actions">
+            <button class="btn btn-primary sm" id="modelDownloadBtn">開始下載</button>
+            <button class="btn btn-danger sm hidden" id="modelDownloadAbortBtn">■ 中止</button>
+            <button class="btn btn-ghost sm" id="modelDownloadCancelBtn">取消</button>
+          </div>
+          <div class="setup-bar hidden" id="modelDownloadBar"><div class="setup-bar-fill" id="modelDownloadBarFill"></div></div>
+        </div>
+      </div>
+      <div class="ctl-group">
+        <span class="ctl-label">說話人</span>
+        <div class="segmented" id="diarizeSeg">
+          <button class="seg-btn active" data-value="1">分離說話人</button>
+          <button class="seg-btn" data-value="0">關閉</button>
+        </div>
+        <p class="ctl-note">標記每句說話人（需 HuggingFace token · <span id="tokenStatusText">檢測中…</span> · <button class="btn btn-ghost sm" id="tokenConfigBtn" type="button" style="padding:2px 8px;font-size:11px;vertical-align:middle;">設定 Token</button>）</p>
+        <div class="setup hidden" id="tokenBox" style="margin-top:10px;text-align:center;">
+          <p class="setup-text">請輸入你的 Hugging Face Access Token（已接受 pyannote 授權）：</p>
+          <div style="display:flex;gap:8px;max-width:440px;margin:8px auto 0;justify-content:center;">
+            <input type="password" id="tokenInput" placeholder="hf_..." style="flex:1;max-width:280px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;" />
+            <button class="btn btn-primary sm" id="tokenSaveBtn">儲存</button>
+            <button class="btn btn-ghost sm" id="tokenCancelBtn">關閉</button>
+          </div>
+          <p class="setup-text" id="tokenMsg" style="font-size:11px;margin-top:4px;color:var(--text-3);"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- run actions: nothing starts until you press 開始轉寫 -->
+    <div class="run-actions" id="runActions">
+      <button class="btn btn-primary" id="startBtn" disabled>開始轉寫</button>
+      <button class="btn btn-danger hidden" id="abortBtn">■ 中止</button>
+      <p class="run-hint" id="runHint">請先選擇音訊檔案</p>
+    </div>
+
+    <!-- progress -->
+    <div class="progress hidden" id="progress">
+      <div class="progress-row">
+        <span class="progress-status" id="progressStatus">準備中…</span>
+        <span class="progress-pct" id="progressPct">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <!-- live transcript -->
+    <div class="transcript hidden" id="transcript">
+      <div class="trans-head">
+        <div class="trans-meta" id="metaChips"></div>
+        <div class="trans-actions">
+          <button class="btn btn-ghost" id="copyBtn">複製全文</button>
+          <button class="btn btn-ghost" id="dlTxt">.txt</button>
+          <button class="btn btn-ghost" id="dlSrt">.srt</button>
+          <button class="btn btn-ghost" id="dlVtt">.vtt</button>
+          <button class="btn btn-secondary sm" id="resetBtn">新轉寫</button>
+        </div>
+      </div>
+      <div class="trans-body" id="transBody"><p class="placeholder">轉寫結果將即時顯示在這裡…</p></div>
+
+      <div class="view-tabs hidden" id="viewTabs">
+        <div class="segmented">
+          <button class="seg-btn active" data-view="corrected">校對版</button>
+          <button class="seg-btn" data-view="raw">原文</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- chat: the transcript is handed to the local LLM as context -->
+    <div class="chat hidden" id="chat">
+      <div class="chat-head">
+        <span class="chat-title">💬 會議記錄助手</span>
+        <span class="chat-sub" id="chatSub">本地 LLM · 逐字稿會自動附上</span>
+        <button class="btn btn-ghost sm" id="chatClear">清除對話</button>
+      </div>
+      <div class="setup hidden" id="setupBox">
+        <p class="setup-text" id="setupText"></p>
+        <div class="setup-actions">
+          <button class="btn btn-secondary sm hidden" id="setupInstall">安裝…</button>
+          <button class="btn btn-secondary sm hidden" id="setupStart">啟動 LLM</button>
+          <button class="btn btn-primary sm hidden" id="setupPull">下載模型</button>
+          <button class="btn btn-danger sm hidden" id="setupStop">■ 停止</button>
+        </div>
+        <div class="setup-bar hidden" id="setupBar"><div class="setup-bar-fill" id="setupBarFill"></div></div>
+      </div>
+      <p class="chat-warn hidden" id="chatWarn"></p>
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-composer">
+        <textarea id="chatInput" rows="2" spellcheck="false"></textarea>
+        <div class="chat-buttons">
+          <button class="btn btn-primary" id="chatSend">送出</button>
+          <button class="btn btn-danger sm hidden" id="chatStop">■ 停止</button>
+        </div>
+      </div>
+      <p class="chat-hint">Enter 送出 · Shift + Enter 換行 · 對話用你目前檢視嘅文字（校對版／原文）</p>
+    </div>
+
+    <!-- error -->
+    <div class="error hidden" id="errorBox">
+      <p id="errorText">發生錯誤</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== How it works ===================== -->
+<section class="how" id="how">
+  <h2 class="how-title fade-up">一份檔案，三步搞定</h2>
+  <div class="how-steps">
+    <div class="step fade-up">
+      <span class="step-num">1</span>
+      <h3>選擇錄音</h3>
+      <p>拖入或點選音訊檔案，任何常見格式皆可。</p>
+    </div>
+    <div class="step fade-up" style="animation-delay:.1s">
+      <span class="step-num">2</span>
+      <h3>本地 GPU 轉寫</h3>
+      <p>Whisper 在你自己的顯示卡上運行，即時字幕逐行浮現。</p>
+    </div>
+    <div class="step fade-up" style="animation-delay:.2s">
+      <span class="step-num">3</span>
+      <h3>匯出文字</h3>
+      <p>複製全文，或下載 .txt / .srt / .vtt 字幕檔案。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== Footer ===================== -->
+<footer class="footer">
+  <p>粵轉文字 · 本地 Whisper 引擎 · faster-whisper + NVIDIA GPU</p>
+  <p class="footer-small">你的音訊不會上傳到任何伺服器 — 一切都在本機完成。</p>
+</footer>
+
+<div class="toast hidden" id="toast">已複製到剪貼簿</div>
+
+<script src="/static/app.js?v=22"></script>
+</body>
+</html>
